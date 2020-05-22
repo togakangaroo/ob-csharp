@@ -101,7 +101,7 @@ In your ~.emacs~-file add csharp to the list of babel languages, i. e.:
   
 ** Hello World 
 
-#+BEGIN_SRC csharp :results verbatim :exports both
+#+BEGIN_SRC dotnet :results verbatim :exports both
 class HelloWorld {
   public static void Main()
   {
@@ -111,7 +111,6 @@ class HelloWorld {
 #+END_SRC
 
 #+RESULTS:
-: Hello World!
 
 ** Tables 
 
