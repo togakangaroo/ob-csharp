@@ -1,9 +1,9 @@
-;;; ob-csharp.el --- org-babel functions for csharp evaluation
+;;; ob-dotnet.el --- org-babel functions for dotnet evaluation
 
 ;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
 
-;; Original Author: Eric Schulte (ob-java.el) 
-;; Author: thomas "at" friendlyvillagers.com 
+;; Original Author: Eric Schulte (ob-java.el)
+;; Author: thomas "at" friendlyvillagers.com
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
 
@@ -25,16 +25,16 @@
 ;;; Commentary:
 
 ;; Currently this only supports the external compilation and execution
-;; of csharp code blocks (i.e., no session support).
+;; of dotnet code blocks (i.e., no session support).
 
 ;;; Code:
 (require 'ob)
 
 (defvar org-babel-tangle-lang-exts)
-(add-to-list 'org-babel-tangle-lang-exts '("csharp" . "cs"))
+(add-to-list 'org-babel-tangle-lang-exts '("dotnet" . "cs"))
 
-(defcustom org-babel-csharp-command "mono"
-  "Name of the csharp command.
+(defcustom org-babel-dotnet-command "dotnet script"
+  "Name of the dotnet command.
 May be either a command in the path, like mono
 or an absolute path name, like /usr/local/bin/mono
 parameters may be used, like mono -verbose"
@@ -42,27 +42,27 @@ parameters may be used, like mono -verbose"
   :version "24.3"
   :type 'string)
 
-(defcustom org-babel-csharp-compiler "gmcs"
-  "Name of the csharp compiler.
+(defcustom org-babel-dotnet-compiler "gmcs"
+  "Name of the dotnet compiler.
 May be either a command in the path, like mcs
 or an absolute path name, like /usr/local/bin/mcs
 parameters may be used, like mcs -warnaserror+"
   :group 'org-babel
   :version "24.3"
-  :type 'string) 
+  :type 'string)
 
 
-(defun org-babel-execute:csharp (body params)
+(defun org-babel-execute:dotnet (body params)
   (let* ((full-body (org-babel-expand-body:generic body params))
          (cmpflag (or (cdr (assoc :cmpflag params)) ""))
          (cmdline (or (cdr (assoc :cmdline params)) ""))
-         (src-file (org-babel-temp-file "csharp-src-" ".cs"))
+         (src-file (org-babel-temp-file "dotnet-src-" ".cs"))
          (exe-file (concat (file-name-sans-extension src-file)  ".exe"))
-         (compile 
+         (compile
           (progn (with-temp-file  src-file (insert full-body))
-                 (org-babel-eval 
-                  (concat org-babel-csharp-compiler " " cmpflag " "  src-file) ""))))
-    (let ((results (org-babel-eval (concat org-babel-csharp-command " " cmdline " " exe-file) "")))
+                 (org-babel-eval
+                  (concat org-babel-dotnet-compiler " " cmpflag " "  src-file) ""))))
+    (let ((results (org-babel-eval (concat org-babel-dotnet-command " " cmdline " " exe-file) "")))
       (org-babel-reassemble-table
        (org-babel-result-cond (cdr (assoc :result-params params))
          (org-babel-read results)
@@ -74,10 +74,10 @@ parameters may be used, like mcs -warnaserror+"
        (org-babel-pick-name
         (cdr (assoc :rowname-names params)) (cdr (assoc :rownames params)))))))
 
-(defun org-babel-prep-session:csharp (session params)
-  "Return an error because csharp does not support sessions."
-  (error "Sessions are not (yet) supported for CSharp"))
+(defun org-babel-prep-session:dotnet (session params)
+  "Return an error because dotnet does not support sessions."
+  (error "Sessions are not (yet) supported for Dotnet"))
 
 
-(provide 'ob-csharp)
-;;; ob-csharp.el ends here
+(provide 'ob-dotnet)
+;;; ob-dotnet.el ends here
